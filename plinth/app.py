@@ -200,6 +200,10 @@ def create_app():
               fe_app_route('/ireland'),
               fe_app_route('/poland'),
               fe_app_route('/germany'),
+              fe_app_route('/uk'),
+              fe_app_route('/sweden'),
+              fe_app_route('/france'),
+              fe_app_route('/us'),
     ]
 
     config_file_name = 'config.hatnote.yaml'
