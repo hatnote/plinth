@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="msapplication-navbutton-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#ffffff">
+  <base href="/"></base>
+  <meta property="og:url" content="https://maps.wikilovesmonuments.org/" />
+  <meta property="og:title" content="Wiki Loves Monuments Map" />
+  <meta property="og:description" content="Discover cultural heritage monuments. Contibute to Wiki Loves Monuments 2019!" />
+  <meta property="og:image" content="https://maps.wikilovesmonuments.org/fb.png" />
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@wikimonuments">
+  <meta name="twitter:title" content="Wiki Loves Monuments Map">
+  <meta name="twitter:description" content="Discover cultural heritage monuments. Contibute to Wiki Loves Monuments 2019!">
+  <meta name="twitter:image" content="https://maps.wikilovesmonuments.org/fb.pn">
+  <title>Wiki Loves Monuments Map</title>
+  <meta name="description" content="Discover cultural heritage monuments. Contibute to Wiki Loves Monuments 2019!">
+</head>
+<body ng-app="monumental" ng-cloak>
+  <ui-view></ui-view>
+<script>
+(function (window) {
+  window.__env = window.__env || {};
+  window.__env.name = 'prod';
+  window.__env.baseUrl = '//maps.wikilovesmonuments.org/be';
+}(this));
+</script>
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  // _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function () {
+    var u = "//stats.wikilovesmonuments.org/";
+    _paq.push(['setTrackerUrl', u + 'piwik.php']);
+    _paq.push(['setSiteId', 48]);
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.type = 'text/javascript'; g.async = true; g.defer = true; g.src = u + 'piwik.js'; s.parentNode.insertBefore(g, s);
+  })();
+</script>
+<noscript>
+  <p><img src="//stats.wikilovesmonuments.org/piwik.php?idsite=48" style="border:0;" alt="" /></p>
+</noscript>
+<!-- End Piwik Code -->
+<script type="text/javascript" src="assets/bundle.min.js?v=19.09.02"></script></body>
+</html>
