@@ -1,6 +1,6 @@
 PyJWT==1.4.2
 PyYAML==3.12
-Werkzeug==0.9.4
+Werkzeug==0.15.3
 argparse==1.4.0
 clastic==0.4.3
 mwoauth==0.2.8
