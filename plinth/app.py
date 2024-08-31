@@ -162,6 +162,9 @@ def send_to_wiki_api(request, cookie, consumer_token, api_url=DEFAULT_WIKI_API_U
     auth = False
     api_args = {k: v for k, v in request.values.items()}
 
+    if api_args.get('filename'):
+        api_args['filename'] = _sanitize_commons_filename(api_args['filename'])
+
     if api_args.get('use_auth'):
 
         if not cookie.get('oauth_access_key'):
@@ -182,13 +185,14 @@ def send_to_wiki_api(request, cookie, consumer_token, api_url=DEFAULT_WIKI_API_U
 
     method = request.method
 
+    files = {}
     if method == 'GET':
         resp = requests.get(api_url, api_args, auth=auth)
     elif method == 'POST':
-        files = {}
+
         for key, value in request.files.items():
             sanitized_filename = _sanitize_commons_filename(value.filename)
-            files[key] = (sanitized_filename, value.stream, value.mimetype)
+            files[sanitized_filename] = (sanitized_filename, value.stream, value.mimetype)
         resp = requests.post(api_url, api_args, auth=auth, files=files)
 
     try:
@@ -198,6 +202,10 @@ def send_to_wiki_api(request, cookie, consumer_token, api_url=DEFAULT_WIKI_API_U
         resp_dict = {'status': 'exception',
                      'exception': resp.text,
                      'api_args': api_args}
+    if resp_dict.get('result') == 'Warning':
+        resp_dict['api_args'] = api_args
+        if files:
+            resp_dict['filenames'] = list(files.keys())
     return resp_dict
 
 
