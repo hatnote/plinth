@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
 
-import os
 import json
-import urllib2
-
+import os
+import re
+import uuid
+from datetime import datetime
 from urllib import urlencode
 
-import yaml
 import clastic
 import requests
-
-from clastic import Application, redirect, StaticFileRoute, MetaApplication
-from clastic.static import StaticApplication
+import urllib2
+import yaml
+from clastic import Application, MetaApplication, StaticFileRoute, redirect
+from clastic.middleware.cookie import NEVER, SignedCookieMiddleware
 from clastic.render import render_basic
-from clastic.middleware.cookie import SignedCookieMiddleware, NEVER
-
-from mwoauth import Handshaker, RequestToken, ConsumerToken
+from clastic.static import StaticApplication
+from mwoauth import ConsumerToken, Handshaker, RequestToken
 from requests_oauthlib import OAuth1
-
 
 DEFAULT_WIKI_API_URL = 'https://commons.wikimedia.org/w/api.php'
 COMMONS_WIKI_API_URL = 'https://commons.wikimedia.org/w/api.php'
@@ -26,6 +25,32 @@ TEST_WIKI_API_URL = 'https://test.wikipedia.org/w/api.php'
 WIKI_OAUTH_URL = 'https://commons.wikimedia.org/w/index.php'
 PROJ_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_PATH = os.path.join(PROJ_PATH, 'static')
+
+
+def _sanitize_commons_filename(filename):
+    # Remove leading/trailing whitespace
+    filename = filename.strip()
+    
+    # Replace spaces with underscores
+    filename = filename.replace(' ', '_')
+    
+    # Remove invalid characters
+    filename = re.sub(r'[#<>[\]|{}/:*?\']', '', filename)
+    
+    # Ensure the filename doesn't start with a dot
+    filename = filename.lstrip('.')
+    
+    # Truncate to 240 bytes (Wikimedia Commons limit)
+    filename = filename.encode('utf-8')[:240].decode('utf-8', errors='ignore')
+    
+    # If filename is empty after sanitization, create a default name
+    if not filename:
+        current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+        unique_id = str(uuid.uuid4())[:8]  # Use first 8 characters of UUID
+        filename = f"{current_time}_{unique_id}"
+    
+    return filename
+
 
 def home(cookie, request):
     headers = dict([(k, v) for k, v in
@@ -136,6 +161,10 @@ def send_to_wiki_api(request, cookie, consumer_token, api_url=DEFAULT_WIKI_API_U
 
     auth = False
     api_args = {k: v for k, v in request.values.items()}
+
+    filename = api_args.get('filename')
+    if filename is not None:
+        api_args['filename'] = _sanitize_commons_filename(api_args['filename'])
 
     if api_args.get('use_auth'):
 
