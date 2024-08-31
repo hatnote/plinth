@@ -162,10 +162,6 @@ def send_to_wiki_api(request, cookie, consumer_token, api_url=DEFAULT_WIKI_API_U
     auth = False
     api_args = {k: v for k, v in request.values.items()}
 
-    filename = api_args.get('filename')
-    if filename is not None:
-        api_args['filename'] = _sanitize_commons_filename(api_args['filename'])
-
     if api_args.get('use_auth'):
 
         if not cookie.get('oauth_access_key'):
@@ -189,7 +185,11 @@ def send_to_wiki_api(request, cookie, consumer_token, api_url=DEFAULT_WIKI_API_U
     if method == 'GET':
         resp = requests.get(api_url, api_args, auth=auth)
     elif method == 'POST':
-        resp = requests.post(api_url, api_args, auth=auth, files=request.files)
+        files = {}
+        for key, value in request.files.items():
+            sanitized_filename = _sanitize_commons_filename(value.filename)
+            files[key] = (sanitized_filename, value.stream, value.mimetype)
+        resp = requests.post(api_url, api_args, auth=auth, files=files)
 
     try:
         resp_dict = resp.json()
