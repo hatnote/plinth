@@ -47,7 +47,7 @@ def _sanitize_commons_filename(filename):
     if not filename:
         current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
         unique_id = str(uuid.uuid4())[:8]  # Use first 8 characters of UUID
-        filename = f"{current_time}_{unique_id}"
+        filename = "{current_time}_{unique_id}".format(current_time=current_time, unique_id=unique_id)
     
     return filename
 
