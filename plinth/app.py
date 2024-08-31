@@ -34,8 +34,8 @@ def _sanitize_commons_filename(filename):
     # Replace spaces with underscores
     filename = filename.replace(' ', '_')
     
-    # Remove invalid characters
-    filename = re.sub(r'[#<>[\]|{}/:*?\']', '', filename)
+    # Remove invalid characters including parentheses
+    filename = re.sub(r'[#<>[\]|{}/:*?\'()]', '', filename)
     
     # Ensure the filename doesn't start with a dot
     filename = filename.lstrip('.')
