@@ -35,7 +35,7 @@ def _sanitize_commons_filename(filename):
     filename = filename.replace(' ', '_')
     
     # Remove invalid characters
-    filename = re.sub(r'[#<>[\]|{}/:*?\'()-]', '', filename)
+    filename = re.sub(r'[#<>[\]|{}/:*?\']', '', filename)
     
     # Ensure the filename doesn't start with a dot
     filename = filename.lstrip('.')
@@ -164,6 +164,8 @@ def send_to_wiki_api(request, cookie, consumer_token, api_url=DEFAULT_WIKI_API_U
 
     if api_args.get('filename'):
         api_args['filename'] = _sanitize_commons_filename(api_args['filename'])
+        # 2024-08-30 - Could not get the API to accept even the most sanitized name, so this is the nuclear option. It works.
+        api_args['ignorewarnings'] = "1"  
 
     if api_args.get('use_auth'):
 
