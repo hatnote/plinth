@@ -189,10 +189,9 @@ def send_to_wiki_api(request, cookie, consumer_token, api_url=DEFAULT_WIKI_API_U
     if method == 'GET':
         resp = requests.get(api_url, api_args, auth=auth)
     elif method == 'POST':
-
         for key, value in request.files.items():
             sanitized_filename = _sanitize_commons_filename(value.filename)
-            files[sanitized_filename] = (sanitized_filename, value.stream, value.mimetype)
+            files[key] = (sanitized_filename, value.stream, value.mimetype)
         resp = requests.post(api_url, api_args, auth=auth, files=files)
 
     try:
