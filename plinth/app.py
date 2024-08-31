@@ -201,7 +201,7 @@ def send_to_wiki_api(request, cookie, consumer_token, api_url=DEFAULT_WIKI_API_U
         resp_dict = {'status': 'exception',
                      'exception': resp.text,
                      'api_args': api_args}
-    if resp_dict.get('result') == 'Warning':
+    if resp_dict.get('upload', {}).get('result') == 'Warning':
         resp_dict['api_args'] = api_args
         if files:
             resp_dict['filenames'] = list(files.keys())
