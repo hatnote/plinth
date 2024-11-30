@@ -1,5 +1,5 @@
 PyJWT==1.4.2
-PyYAML==3.12
+PyYAML==5.4
 Werkzeug==0.9.4
 argparse==1.4.0
 clastic==0.4.3
